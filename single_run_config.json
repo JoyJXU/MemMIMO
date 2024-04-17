@@ -1,0 +1,18 @@
+{
+  "seed": 123,
+  "gpu": true,
+  "rows": 10,
+  "cols": 2,
+  "rep": 5000,
+  "batch_size": 500,
+  "memristor_structure": "simo",
+  "memristor_device": "old_ferro",
+  "c2c_variation": true,
+  "d2d_variation": 5,
+  "stuck_at_fault": true,
+  "retention_loss": 10,
+  "aging_effect": 5,
+  "process_node": 180,
+  "input_bit": 16,
+  "power_estimation": false
+}
