@@ -3,8 +3,8 @@
     {
         "P_on":1,
         "P_off":1,
-        "G_on":100,
-        "G_off":1000,
+        "G_on":1e-10,
+        "G_off":1e-8,
         "alpha_on":1,
         "alpha_off":1,
         "v_on":-1,
@@ -26,11 +26,10 @@
         "Aging_off":0,
         "delta_t":2e-3,
         "duty_ratio":0.5,
-        "trans_ratio":1.1111e-3,
-        "vinput_pos": 100,
-        "vinput_neg": -1.4877,
         "v_read": 0.1,
-        "mem_size":1e-4
+        "mem_size":1e5,
+        "relax_ratio_col":1.25,
+        "relax_ratio_row":1.25
     },
     "ferro":
     {
@@ -59,11 +58,10 @@
         "Aging_off":0.5,
         "delta_t":2.0e-7,
         "duty_ratio":0.5,
-        "trans_ratio":1.1198e5,
-        "vinput_pos": 6.0,
-        "vinput_neg": -2.55,
         "v_read": 0.1,
-        "mem_size":3.5e-7
+        "mem_size":350,
+        "relax_ratio_col":1.25,
+        "relax_ratio_row":1.25
     },
     "hu":
     {
@@ -77,7 +75,7 @@
         "v_off":2,
         "k_on":-3.36,
         "k_off":19.52,
-        "retention_loss_tau": 0.012478,
+        "retention_loss_tau": 6200,
         "retention_loss_beta": 1.066,
         "sigma_relative":0.02438171519582677,
         "sigma_absolute":0.005490197724238527,
@@ -92,11 +90,10 @@
         "Aging_off":1e-8,
         "delta_t":1.0e-1,
         "duty_ratio":0.3,
-        "trans_ratio":6.25e8,
-        "vinput_pos": 12,
-        "vinput_neg": -3.63,
         "v_read": 0.5,
-        "mem_size":1e-4
+        "mem_size":1e5,
+        "relax_ratio_col":1.25,
+        "relax_ratio_row":1.25
     },
     "new_ferro":
     {
@@ -114,22 +111,21 @@
         "retention_loss_beta": 1,
         "sigma_relative":0.1032073708277878,
         "sigma_absolute":0.005783083695110348,
-        "Gon_sigma":0.7e-8,
-        "Goff_sigma":0.9e-6,
+        "Gon_sigma":0.2,
+        "Goff_sigma":0.2,
         "Pon_sigma":0.2,
         "Poff_sigma":0.1,
-        "SAF_lambda": 1,
+        "SAF_lambda": 0.05,
         "SAF_ratio": 9,
-        "SAF_delta": 0,
+        "SAF_delta": 1.5e-7,
         "Aging_on":0.5,
         "Aging_off":0.5,
         "delta_t":1.6e-6,
         "duty_ratio":0.5,
-        "trans_ratio":1.1198e5,
-        "vinput_pos": 6.0,
-        "vinput_neg": -2.55,
         "v_read": 0.1,
-        "mem_size":1e-4
+        "mem_size":350,
+        "relax_ratio_col":2,
+        "relax_ratio_row":2
     },
     "ferro_resistance_abandon":
     {
@@ -145,9 +141,6 @@
         "k_off":1.64e5,
         "delta_t":2.0e-7,
         "duty_ratio":0.5,
-        "trans_ratio":7.2254e-8,
-        "vinput_pos": 12,
-        "vinput_neg": -2.44,
         "retention_loss_tau": 0,
         "retention_loss_beta": 1,
         "sigma_relative":0.1544,
