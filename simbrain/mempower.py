@@ -1,6 +1,9 @@
 import torch
 from typing import Iterable, Optional, Union
 import pickle
+import os
+
+SIMBRAIN_PATH = os.getenv("SIMBRAIN_PATH")
 
 class Power(torch.nn.Module):
     # language=rst
@@ -55,7 +58,8 @@ class Power(torch.nn.Module):
     
         self.sim_power = {}
 
-        with open('../../memristor_lut.pkl', 'rb') as f:
+        file_path = os.path.join(SIMBRAIN_PATH, 'memristor_lut.pkl')
+        with open(file_path, 'rb') as f:
             self.memristor_luts = pickle.load(f)
         assert self.device_name in self.memristor_luts.keys(), "No Look-Up-Table Data Available for the Target Memristor Type!"
         

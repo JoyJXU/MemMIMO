@@ -5,9 +5,9 @@ from simbrain.periphcircuit import ADC_Module
 import json
 import pickle
 import torch
-import math
-import torch.nn.functional as F
-import matplotlib.pyplot as plt
+import os
+
+SIMBRAIN_PATH = os.getenv("SIMBRAIN_PATH")
 
 class Mapping(torch.nn.Module):
     # language=rst
@@ -52,19 +52,22 @@ class Mapping(torch.nn.Module):
         self.register_buffer("mem_x_read", torch.Tensor())
         self.register_buffer("mem_t", torch.Tensor())
 
-        with open('../../memristor_device_info.json', 'r') as f:
+        file_path = os.path.join(SIMBRAIN_PATH, 'memristor_device_info.json')
+        with open(file_path, 'r') as f:
             self.memristor_info_dict = json.load(f)
         assert self.device_name in self.memristor_info_dict.keys(), "Invalid Memristor Device!"
         self.Gon = self.memristor_info_dict[self.device_name]['G_on']
         self.Goff = self.memristor_info_dict[self.device_name]['G_off']
         self.v_read = self.memristor_info_dict[self.device_name]['v_read']
 
-        with open('../../CMOS_tech_info.json', 'r') as f:
+        file_path = os.path.join(SIMBRAIN_PATH, 'CMOS_tech_info.json')
+        with open(file_path, 'r') as f:
             self.CMOS_tech_info_dict = json.load(f)
         assert self.device_roadmap in self.CMOS_tech_info_dict.keys(), "Invalid Memristor Device!"
         assert str(self.CMOS_technode) in self.CMOS_tech_info_dict[self.device_roadmap].keys(), "Invalid Memristor Device!"
 
-        with open('../../memristor_lut.pkl', 'rb') as f:
+        file_path = os.path.join(SIMBRAIN_PATH, 'memristor_lut.pkl')
+        with open(file_path, 'rb') as f:
             self.memristor_luts = pickle.load(f)
         assert self.device_name in self.memristor_luts.keys(), "No Look-Up-Table Data Available for the Target Memristor Type!"
 

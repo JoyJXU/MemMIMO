@@ -3,6 +3,9 @@ from simbrain.mempower import Power
 from simbrain.memarea import Area
 import torch
 import json
+import os
+
+SIMBRAIN_PATH = os.getenv("SIMBRAIN_PATH")
 
 class MemristorArray(torch.nn.Module):
     # language=rst
@@ -78,7 +81,8 @@ class MemristorArray(torch.nn.Module):
         self.dr = self.memristor_info_dict[self.device_name]['duty_ratio']
         self.batch_size = None
 
-        with open('../../wire_tech_info.json', 'r') as file:
+        file_path = os.path.join(SIMBRAIN_PATH, 'wire_tech_info.json')
+        with open(file_path, 'r') as file:
             self.tech_info_dict = json.load(file)
 
         self.input_bit = sim_params['input_bit']
