@@ -296,11 +296,6 @@ class MimoMapping(Mapping):
         self.mem_pos_neg.mem_t += self.batch_interval * (self.batch_size - 1)
         self.mem_neg_neg.mem_t += self.batch_interval * (self.batch_size - 1)
 
-    def update_SAF_mask(self) -> None:
-        self.mem_pos_pos.update_SAF_mask()
-        self.mem_pos_neg.update_SAF_mask()
-        self.mem_neg_pos.update_SAF_mask()
-        self.mem_neg_neg.update_SAF_mask()
 
     def total_energy_calculation(self) -> None:
         # language=rst

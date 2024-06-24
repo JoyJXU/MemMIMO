@@ -2,7 +2,6 @@ import argparse
 import sys
 import torch
 import time
-sys.path.append('../../')
 
 from testbenches import *
 from simbrain.mapping import MimoMapping
@@ -16,12 +15,9 @@ parser.add_argument("--cols", type=int, default=64)
 parser.add_argument("--rep", type=int, default=1)
 parser.add_argument("--batch_size", type=int, default=1)
 parser.add_argument("--memristor_structure", type=str, default='mimo')
-parser.add_argument("--memristor_device", type=str, default='MF')
+parser.add_argument("--memristor_device", type=str, default='MF') # ideal, ferro, hu(FS) or MF
 parser.add_argument("--c2c_variation", type=bool, default=True)
 parser.add_argument("--d2d_variation", type=int, default=1) # 0: No d2d variation, 1: both, 2: Gon/Goff only, 3: nonlinearity only
-parser.add_argument("--stuck_at_fault", type=bool, default=False)
-parser.add_argument("--retention_loss", type=int, default=0) # retention loss, 0: without it, 1: during pulse, 2: no pluse for a long time
-parser.add_argument("--aging_effect", type=int, default=0) # 0: No aging effect, 1: equation 1, 2: equation 2
 parser.add_argument("--input_bit", type=int, default=8)
 parser.add_argument("--ADC_precision", type=int, default=16)
 parser.add_argument("--ADC_setting", type=int, default=4)  # 2:two memristor crossbars use one ADC; 4:one memristor crossbar use one ADC
@@ -61,8 +57,7 @@ def main():
 
     sim_params = {'device_structure': args.memristor_structure, 'device_name': args.memristor_device,
                   'c2c_variation': args.c2c_variation, 'd2d_variation': args.d2d_variation,
-                  'stuck_at_fault': args.stuck_at_fault, 'retention_loss': args.retention_loss,
-                  'aging_effect': args.aging_effect, 'wire_width': args.wire_width, 'input_bit': args.input_bit,
+                  'wire_width': args.wire_width, 'input_bit': args.input_bit,
                   'batch_interval': 1, 'CMOS_technode': args.CMOS_technode, 'ADC_precision': args.ADC_precision,
                   'ADC_setting': args.ADC_setting, 'ADC_rounding_function': args.ADC_rounding_function,
                   'device_roadmap': args.device_roadmap, 'temperature': args.temperature,
@@ -89,7 +84,8 @@ def main():
             _crossbar_2.total_area_calculation()     
             _crossbar_3.total_area_calculation()
             _crossbar_4.total_area_calculation()
-            print("total area=", _crossbar_1.sim_area['sim_total_area'], " m2")
+            print("total area=", _crossbar_1.sim_area['sim_total_area'] + _crossbar_2.sim_area['sim_total_area'] +
+                  _crossbar_3.sim_area['sim_total_area'] + _crossbar_4.sim_area['sim_total_area'], " m2")
 
         run_complex_sim(_crossbar_1, _crossbar_2, _crossbar_3, _crossbar_4, _rep, _batch_size, _rows, _cols, sim_params, device, _logs)
 
