@@ -6,7 +6,8 @@ import pickle
 from simbrain.memarray import MemristorArray
 
 
-def run_d2d_sim(_crossbar_1, _crossbar_2, _crossbar_3, _crossbar_4, _rep, _batch_size, _rows, _cols, sim_params, device, _logs=[None, None, False, False, None]):
+def run_d2d_sim(_crossbar_1, _crossbar_2, _crossbar_3, _crossbar_4, _rep, _read_batch, _batch_size, _rows, _cols,
+                sim_params, device, _logs=[None, None, False, False, None]):
     print("<========================================>")
     print("Test case: ", _rep)
     file_name = "d2d_test_case_r" + str(_rows) + "_c" + str(_cols) + "_rep" + str(_rep) + ".csv"
@@ -29,7 +30,7 @@ def run_d2d_sim(_crossbar_1, _crossbar_2, _crossbar_3, _crossbar_4, _rep, _batch
     _var_g = 0
     _var_linearity = 0
     no_trial = 5
-    read_batch = 1
+    read_batch = _read_batch
     for _var_g in sigma_list_g:
         for _var_linearity in sigma_list_p:
             trial_error = torch.zeros(5,device=device)
@@ -246,7 +247,7 @@ def run_d2d_sim(_crossbar_1, _crossbar_2, _crossbar_3, _crossbar_4, _rep, _batch
     print("Execution time: ", exe_time)
 
 
-def run_c2c_sim(_crossbar_1, _crossbar_2, _crossbar_3, _crossbar_4, _rep, _batch_size, _rows, _cols, sim_params, device,
+def run_c2c_sim(_crossbar_1, _crossbar_2, _crossbar_3, _crossbar_4, _rep, _read_batch, _batch_size, _rows, _cols, sim_params, device,
                 _logs=[None, None, False, False, None], figs=None):
     print("<========================================>")
     print("Test case: ", _rep)
@@ -277,7 +278,7 @@ def run_c2c_sim(_crossbar_1, _crossbar_2, _crossbar_3, _crossbar_4, _rep, _batch
     _var_abs = 0
     _var_rel = 0
     no_trial = 5
-    read_batch = 1
+    read_batch = _read_batch
     for _var_abs in sigma_list_ab:
         for _var_rel in sigma_list_re:
             trial_error = torch.zeros(5,device=device)
@@ -484,9 +485,8 @@ def run_c2c_sim(_crossbar_1, _crossbar_2, _crossbar_3, _crossbar_4, _rep, _batch
     exe_time = end_time - start_time
     print("Execution time: ", exe_time)
 
-def run_complex_sim(_crossbar_1, _crossbar_2, _crossbar_3, _crossbar_4, _rep, _batch_size, _rows, _cols,
-                          sim_params, device,
-                          _logs=[None, None, False, False, None], figs=None):
+def run_complex_sim(_crossbar_1, _crossbar_2, _crossbar_3, _crossbar_4, _rep, _read_batch, _batch_size, _rows, _cols,
+                    sim_params, device, _logs=[None, None, False, False, None], figs=None):
     print("<========================================>")
     print("Test case: ", _rep)
     file_name = "crossbar_size_test_case_r" + str(_rows) + "_c" + \
@@ -509,7 +509,7 @@ def run_complex_sim(_crossbar_1, _crossbar_2, _crossbar_3, _crossbar_4, _rep, _b
     _var_abs = 0
     _var_rel = 0
     no_trial = 10
-    read_batch = 672
+    read_batch = _read_batch
     trial_error = torch.zeros(no_trial,device=device)
     memristor_info_dict = _crossbar_1.memristor_info_dict
     _crossbar_1.mem_pos_pos = MemristorArray(sim_params=sim_params, shape=_crossbar_1.shape,

@@ -2,6 +2,11 @@ import argparse
 import sys
 import torch
 import time
+import os
+
+SIMBRAIN_PATH = os.getenv("SIMBRAIN_PATH")
+
+sys.path.append(SIMBRAIN_PATH)
 
 from testbenches import *
 from simbrain.mapping import MimoMapping
@@ -13,7 +18,8 @@ parser.add_argument("--gpu", dest="gpu", action="store_true", default='gpu')
 parser.add_argument("--rows", type=int, default=16)
 parser.add_argument("--cols", type=int, default=64)
 parser.add_argument("--rep", type=int, default=1)
-parser.add_argument("--batch_size", type=int, default=1)
+parser.add_argument("--read_batch", type=int, default=672) # correspond to operations / update ratio
+parser.add_argument("--write_batch_size", type=int, default=1)
 parser.add_argument("--memristor_structure", type=str, default='mimo')
 parser.add_argument("--memristor_device", type=str, default='MF') # ideal, ferro, hu(FS) or MF
 parser.add_argument("--c2c_variation", type=bool, default=True)
@@ -52,7 +58,8 @@ def main():
     _rows = args.rows
     _cols = args.cols
     _rep = args.rep
-    _batch_size = args.batch_size
+    _read_batch = args.read_batch
+    _batch_size = args.write_batch_size
     _logs = ['test_data', None, False, False, None]
 
     sim_params = {'device_structure': args.memristor_structure, 'device_name': args.memristor_device,
@@ -87,7 +94,7 @@ def main():
             print("total area=", _crossbar_1.sim_area['sim_total_area'] + _crossbar_2.sim_area['sim_total_area'] +
                   _crossbar_3.sim_area['sim_total_area'] + _crossbar_4.sim_area['sim_total_area'], " m2")
 
-        run_complex_sim(_crossbar_1, _crossbar_2, _crossbar_3, _crossbar_4, _rep, _batch_size, _rows, _cols, sim_params, device, _logs)
+        run_complex_sim(_crossbar_1, _crossbar_2, _crossbar_3, _crossbar_4, _rep, _read_batch, _batch_size, _rows, _cols, sim_params, device, _logs)
 
 
 if __name__ == "__main__":
