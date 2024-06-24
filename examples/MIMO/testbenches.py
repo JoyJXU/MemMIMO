@@ -24,7 +24,7 @@ def run_d2d_sim(_crossbar_1, _crossbar_2, _crossbar_3, _crossbar_4, _rep, _read_
 
     print("<==============>")
     sigma_list_g = [0,0.0005,0.001,0.005,0.01,0.05,0.1, 0.5, 1]
-    sigma_list_p = [0.0005]
+    sigma_list_p = [0,0.0005,0.001,0.005,0.01,0.05,0.1, 0.5, 1]
     # print("Start Sigma: ", sigma_list[1], ", End Sigma: ", sigma_list[-1], ", Sigma=0 Included")
 
     _var_g = 0
@@ -33,7 +33,7 @@ def run_d2d_sim(_crossbar_1, _crossbar_2, _crossbar_3, _crossbar_4, _rep, _read_
     read_batch = _read_batch
     for _var_g in sigma_list_g:
         for _var_linearity in sigma_list_p:
-            trial_error = torch.zeros(5,device=device)
+            trial_error = torch.zeros(no_trial, device=device)
             for trial in range(no_trial):
                 device_name = sim_params['device_name']
                 input_bit = sim_params['input_bit']
@@ -273,7 +273,7 @@ def run_c2c_sim(_crossbar_1, _crossbar_2, _crossbar_3, _crossbar_4, _rep, _read_
     print("Row No. ", _rows, " Column No. ", _cols, " Repetition No. ", _rep, " Batch Size: ", _batch_size)
 
     print("<==============>")
-    sigma_list_re = [0.0005]
+    sigma_list_re = [0,0.0005,0.001,0.005,0.01, 0.05, 0.1, 0.5, 1]
     sigma_list_ab = [0,0.0005,0.001,0.005,0.01, 0.05, 0.1, 0.5, 1]
     _var_abs = 0
     _var_rel = 0
@@ -281,7 +281,7 @@ def run_c2c_sim(_crossbar_1, _crossbar_2, _crossbar_3, _crossbar_4, _rep, _read_
     read_batch = _read_batch
     for _var_abs in sigma_list_ab:
         for _var_rel in sigma_list_re:
-            trial_error = torch.zeros(5,device=device)
+            trial_error = torch.zeros(no_trial, device=device)
             for trial in range(no_trial):
                 device_name = sim_params['device_name']
                 input_bit = sim_params['input_bit']
@@ -510,7 +510,7 @@ def run_complex_sim(_crossbar_1, _crossbar_2, _crossbar_3, _crossbar_4, _rep, _r
     _var_rel = 0
     no_trial = 10
     read_batch = _read_batch
-    trial_error = torch.zeros(no_trial,device=device)
+    trial_error = torch.zeros(no_trial, device=device)
     memristor_info_dict = _crossbar_1.memristor_info_dict
     _crossbar_1.mem_pos_pos = MemristorArray(sim_params=sim_params, shape=_crossbar_1.shape,
                                              memristor_info_dict=memristor_info_dict)
