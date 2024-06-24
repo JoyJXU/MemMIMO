@@ -261,8 +261,10 @@ class MimoMapping(Mapping):
             raise Exception("Only 2-set and 4-set ADC are supported!")
 
         # Current to results
-        self.mem_x_read = self.trans_ratio * mem_i / (2 ** self.input_bit - 1) / self.v_read
-
+        if self.device_name == 'hu':
+            self.mem_x_read = 1/(1.335e-9 - self.Gon) * mem_i / (2 ** self.input_bit - 1) / self.v_read
+        else:
+            self.mem_x_read = self.trans_ratio * mem_i / (2 ** self.input_bit - 1) / self.v_read
         return self.mem_x_read
 
 
@@ -272,13 +274,17 @@ class MimoMapping(Mapping):
         assert torch.all(within_range), "The target Matrix Must be in the Range [0, 1]!"
 
         # Target x to target conductance
-        target_c = target_matrix / self.trans_ratio + self.Gon
+        # target_c = target_matrix / self.trans_ratio + self.Gon
 
         # Get access to the look-up-table of the target memristor
         luts = self.memristor_luts[self.device_name]['conductance']
-
+        luts = torch.tensor(luts, device=target_matrix.device)
+        if self.device_name == 'hu':
+            luts = (luts - self.Gon) / (1.335e-9 - self.Gon)
+        else:
+            luts = (luts - self.Gon) / (self.Goff - self.Gon)
         # Find the nearest conductance value
-        c_diff = torch.abs(torch.tensor(luts, device=target_c.device) - target_c.unsqueeze(3))
+        c_diff = torch.abs(luts - target_matrix.unsqueeze(3))
         nearest_pulse_no = torch.argmin(c_diff, dim=3)
 
         return nearest_pulse_no
@@ -401,4 +407,3 @@ class MimoMapping(Mapping):
                          'sim_periph_area':periph_total_area,
                          'sim_total_area':self.sim_total_area,
                          'sim_used_area_ratio':(self.sim_mem_area+periph_total_area)/self.sim_total_area}
-

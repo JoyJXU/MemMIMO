@@ -90,7 +90,8 @@ class DAC_Module_Area(torch.nn.Module):
             self.Dff_width = wDff * numDff
             self.Dff_height = hDff
 
-        self.Dff_area = self.Dff_height * self.Dff_width
+        # self.Dff_area = self.Dff_height * self.Dff_width
+        self.Dff_area = hDff * wDff * numDff
 
         return self.Dff_height, self.Dff_width, self.Dff_area
 
@@ -117,12 +118,13 @@ class DAC_Module_Area(torch.nn.Module):
                 numColTgPair = int(math.ceil(self.shape[0] / numTgPairPerCol))  # Get min # columns based on this max # Tg pair per column
                 numTgPairPerCol = int(math.ceil(self.shape[0] / numColTgPair))  # Get # Tg pair per column based on this min # columns
                 TgHeight = newHeight / numTgPairPerCol
-                wTg, hTg = self.formula_function.calculate_gate_area("INV", 1, widthTgN, widthTgP, TgHeight)
+                wTg, hTg = self.formula_function.calculate_gate_area("INV", 1, widthTgN, widthTgP, minCellHeight)
 
                 self.Switchmatrix_height = newHeight
                 self.Switchmatrix_height_total = max(newHeight, self.Dff_height)
                 self.Switchmatrix_width = (wTg * 2) * numColTgPair
                 self.Switchmatrix_width_total = (wTg * 2) * numColTgPair + self.Dff_width
+                self.Switchmatrix_area = (wTg * 2) * minCellHeight * self.shape[0] + self.Dff_area
 
             else:
                 wTg, hTg = self.formula_function.calculate_gate_area("INV", 1, widthTgN, widthTgP,
@@ -143,7 +145,7 @@ class DAC_Module_Area(torch.nn.Module):
                                                                      "PMOS") * self.CMOS_technode_meter / (resTg * 2)
             if newWidth:
                 # DFF
-                numDff = self.shape[0]
+                numDff = self.shape[1]
                 self.DFF_area_calculation(None, newWidth, numDff)
 
                 minCellWidth = 2 * (self.POLY_WIDTH + self.MIN_GAP_BET_GATE_POLY) * self.CMOS_technode_meter  # min standard cell width for 1 Tg
@@ -155,15 +157,16 @@ class DAC_Module_Area(torch.nn.Module):
                 numRowTgPair = int(math.ceil(self.shape[1] / numTgPairPerRow))  # Get min # rows based on this max # Tg pair per row
                 numTgPairPerRow = int(math.ceil(self.shape[1] / numRowTgPair))  # Get # Tg pair per row based on this min # rows
                 TgWidth = newWidth / numTgPairPerRow / 2  # division of 2 because there are 2 Tg in one pair
-                numFold = int(TgWidth / (0.5 * minCellWidth)) - 1  # get the max number of folding
+                numFold = int(minCellWidth / (0.5 * minCellWidth)) - 1  # get the max number of folding
 
                 # widthTgN, widthTgP and numFold can determine the height and width of each pass gate
-                wTg, hTg = self.formula_function.calculate_pass_gate_area(widthTgN, widthTgP, numFold)
+                wTg, hTg = self.formula_function.calculate_pass_gate_area(widthTgN, widthTgP, numFold)#numfold
 
                 self.Switchmatrix_width = newWidth
                 self.Switchmatrix_width_total = max(newWidth, self.Dff_width)
                 self.Switchmatrix_height = hTg * numRowTgPair
                 self.Switchmatrix_height_total = hTg * numRowTgPair + self.Dff_height
+                self.Switchmatrix_area = hTg * 2 * minCellWidth * self.shape[1] + self.Dff_area
 
             else:
                 # Default (pass gate with folding=1)
@@ -175,7 +178,7 @@ class DAC_Module_Area(torch.nn.Module):
                 self.Switchmatrix_height = hTg
                 self.Switchmatrix_height_total = hTg + self.Dff_height
 
-        self.Switchmatrix_area = self.Switchmatrix_height * self.Switchmatrix_width + self.Dff_area
+        # self.Switchmatrix_area = self.Switchmatrix_height * self.Switchmatrix_width + self.Dff_area
 
         return self.Switchmatrix_height_total, self.Switchmatrix_width_total, self.Switchmatrix_area
 
@@ -256,7 +259,8 @@ class ADC_Module_Area(torch.nn.Module):
         self.Adder_width = newWidth
         self.Adder_height = self.hAdder * numRowAdder
 
-        self.Adder_area = self.Adder_height * self.Adder_width
+        # self.Adder_area = self.Adder_height * self.Adder_width
+        self.Adder_area = numAdder * self.hAdder * self.wAdder
 
         return self.Adder_height, self.Adder_width, self.Adder_area
 
@@ -298,8 +302,9 @@ class ADC_Module_Area(torch.nn.Module):
         numRowDFF = int(math.ceil(numDff / numDFFPerRow))
         self.Dff_width = newWidth
         self.Dff_height = hDff * numRowDFF
-
-        self.Dff_area = self.Dff_height * self.Dff_width
+    
+        # self.Dff_area = self.Dff_height * self.Dff_width
+        self.Dff_area = hDff * wDff * numDff
 
         return self.Dff_height, self.Dff_width, self.Dff_area
 
@@ -322,7 +327,7 @@ class ADC_Module_Area(torch.nn.Module):
 
             # Assume the Current Mirrors are on the same row and the total width of them is smaller than the adder or DFF
 
-        return self.SarADC_height, self.SarADC_width,self.SarADC_area
+        return self.SarADC_height, self.SarADC_width, self.SarADC_area
 
 
     def ADC_module_cal_area(self) -> None:

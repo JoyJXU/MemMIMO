@@ -89,14 +89,14 @@ class MemristorArray(torch.nn.Module):
 
         self.wire_width = sim_params['wire_width']
         relax_ratio_col = self.memristor_info_dict[self.device_name]['relax_ratio_col'] # Leave space for adjacent memristors
-        relax_ratio_row = self.memristor_info_dict[self.device_name]['relax_ratio_col'] # Leave space for adjacent memristors
+        relax_ratio_row = self.memristor_info_dict[self.device_name]['relax_ratio_row'] # Leave space for adjacent memristors
         mem_size = self.memristor_info_dict[self.device_name]['mem_size'] * 1e-9
         self.length_row = shape[1] * relax_ratio_col * mem_size
         self.length_col = shape[0] * relax_ratio_row * mem_size
         AR = self.tech_info_dict[str(self.wire_width)]['AR']
         Rho = self.tech_info_dict[str(self.wire_width)]['Rho']
         wire_resistance_unit_col = relax_ratio_col * mem_size * Rho / (AR * self.wire_width * self.wire_width * 1e-18)
-        wire_resistance_unit_row = relax_ratio_col * mem_size * Rho / (AR * self.wire_width * self.wire_width * 1e-18)
+        wire_resistance_unit_row = relax_ratio_row * mem_size * Rho / (AR * self.wire_width * self.wire_width * 1e-18)
         self.register_buffer("total_wire_resistance", torch.Tensor())
         self.total_wire_resistance = wire_resistance_unit_col * torch.arange(1, self.shape[1] + 1, device=self.total_wire_resistance.device) + \
             wire_resistance_unit_row * torch.arange(self.shape[0], 0, -1, device=self.total_wire_resistance.device)[:, None]
@@ -129,7 +129,7 @@ class MemristorArray(torch.nn.Module):
             self.normal_absolute = torch.zeros(batch_size, *self.shape, device=self.normal_absolute.device)
 
         if self.d2d_variation in [1, 2]:
-            print('Add D2D variation in Gon/Goff!')
+            # print('Add D2D variation in Gon/Goff!')
             G_off = self.memristor_info_dict[self.device_name]['G_off']
             G_on = self.memristor_info_dict[self.device_name]['G_on']
             Gon_sigma = self.memristor_info_dict[self.device_name]['Gon_sigma']
@@ -149,7 +149,7 @@ class MemristorArray(torch.nn.Module):
             self.Goff_d2d = torch.stack([self.Goff_d2d] * batch_size)
 
         if self.d2d_variation in [1, 3]:
-            print('Add D2D variation in Pon/Poff!')
+            # print('Add D2D variation in Pon/Poff!')
             P_off = self.memristor_info_dict[self.device_name]['P_off']
             P_on = self.memristor_info_dict[self.device_name]['P_on']
             Pon_sigma = self.memristor_info_dict[self.device_name]['Pon_sigma']
@@ -332,14 +332,8 @@ class MemristorArray(torch.nn.Module):
 
         # Non-idealities
         mem_info = self.memristor_info_dict[self.device_name]
-        k_off = mem_info['k_off']
-        k_on = mem_info['k_on']
         v_off = mem_info['v_off']
         v_on = mem_info['v_on']
-        alpha_off = mem_info['alpha_off']
-        alpha_on = mem_info['alpha_on']
-        P_off = mem_info['P_off']
-        P_on = mem_info['P_on']
         G_off = mem_info['G_off']
         G_on = mem_info['G_on']
         retention_loss_tau = mem_info['retention_loss_tau']
@@ -368,7 +362,12 @@ class MemristorArray(torch.nn.Module):
             self.mem_x = torch.clamp(self.mem_x, min=G_on, max=G_off)
             self.mem_x = (self.mem_x - G_on) / (G_off - G_on)
 
-        self.x2 = self.mem_x
+        if self.c2c_variation:
+            device_v = torch.mul(self.mem_x, self.normal_relative) + self.normal_absolute
+            self.x2 = self.mem_x + device_v
+            self.x2 = torch.clamp(self.x2, min=0, max=1)
+        else:
+            self.x2 = self.mem_x
 
         if self.stuck_at_fault:
             self.x2.masked_fill_(self.SAF0_mask, 0)

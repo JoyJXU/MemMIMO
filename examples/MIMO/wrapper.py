@@ -28,19 +28,17 @@ class Interface:
         # parameter setting for memristor crossbar simulation - constants
         # Memristor Array
         memristor_structure = "mimo"
-        memristor_device = "new_ferro"  # ideal, ferro, new_ferro, or hu
+        memristor_device = "MF"  # ideal, ferro, hu(FS), or MF
         c2c_variation = False
-        d2d_variation = (
-            0  # 0: No d2d variation, 1: both, 2: Gon/Goff only, 3: nonlinearity only
-        )
+        d2d_variation = 0  # 0: No d2d variation, 1: both, 2: Gon/Goff only, 3: nonlinearity only
         stuck_at_fault = False
         retention_loss = 0  # retention loss, 0: without it, 1: during pulse, 2: no pluse for a long time
         aging_effect = 0  # 0: No aging effect, 1: equation 1, 2: equation 2
         # Peripheral Circuit
-        wire_width = 200  # In practice, wire_width shall be set around 1/2 of the memristor size; Hu: 10um; Ferro:200nm;
+        wire_width = 10000  # In practice, wire_width shall be set around 1/2 of the memristor size; Hu: 10um; Ferro:200nm;
         input_bit = 8
         CMOS_technode = 14
-        ADC_precision = 32
+        ADC_precision = 16
         ADC_setting = 4  # 2:two memristor crossbars use one ADC; 4:one memristor crossbar use one ADC
         ADC_rounding_function = "floor"  # floor or round
         device_roadmap = "HP"  # HP: High Performance or LP: Low Power
@@ -94,27 +92,21 @@ def mem_program(value):
     # array to tensor
     matrix_tensor = torch.tensor(value).unsqueeze(0)
     return interface_instance.program(matrix_tensor)
-    # return value + 1
 
 
 def mem_compute(value):
     # array to tensor
     vector_tensor = torch.tensor(value).unsqueeze(0).unsqueeze(0)
-    # print("hello", vector_tensor)
     output_tensor = interface_instance.compute(vector_tensor)
-    # print(output_tensor)
     output_list = output_tensor.tolist()
-    # print(output_list)
     output_flatten = list(chain.from_iterable(output_list))
     output_flatten = list(chain.from_iterable(output_flatten))
-    # print(output_flatten)
     # tensor to array
     output = output_flatten  # output_tensor.numpy()
     return output
 
 
 def main():
-
     print(SIMBRAIN_PATH)
     x = mem_program([[0, 0.1], [0.1, 0.2], [0.2, 0.3]])
     print(x)
