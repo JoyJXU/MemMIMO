@@ -26,12 +26,11 @@ In the demo, we are now using uniformly distribued numbers ranging from -1 to 1.
 
 ## MIMO system requirements:
 
-The system requirements are extracted from use cases and serve as the experimental settings for the simulation framework. The system requirements include size of the input vector, size of the matrix, operation / update rati
-o, and the number of matrix updates.
+The system requirements are extracted from use cases and serve as the experimental settings for the simulation framework. The system requirements include size of the input vector, size of the matrix, operation / update ratio, and the number of matrix updates.
 
-The input vector, size of the matrix can be set by indicating the' --rows' and '--cols' in examples/MIMO/main_test.py
+The size of the input vector and the matrix can be set by indicating the '--cols' and '--rows' in examples/MIMO/main_test.py
 
-The operation / update ratio can be adjusted by the 'read_batch' in examples/MIMO/testbenches.py
+The operation / update ratio can be adjusted by the '--read_batch' in examples/MIMO/main_test.py
 
 The number of matrix updates can be adjusted by the '--rep' in examples/MIMO/main_test.py
 
