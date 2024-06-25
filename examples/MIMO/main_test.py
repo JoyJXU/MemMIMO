@@ -22,14 +22,14 @@ parser.add_argument("--read_batch", type=int, default=672) # correspond to opera
 parser.add_argument("--write_batch_size", type=int, default=1)
 parser.add_argument("--memristor_structure", type=str, default='mimo')
 parser.add_argument("--memristor_device", type=str, default='MF') # ideal, ferro, hu(FS) or MF
-parser.add_argument("--c2c_variation", type=bool, default=True)
-parser.add_argument("--d2d_variation", type=int, default=1) # 0: No d2d variation, 1: both, 2: Gon/Goff only, 3: nonlinearity only
+parser.add_argument("--c2c_variation", type=bool, default=False)
+parser.add_argument("--d2d_variation", type=int, default=0) # 0: No d2d variation, 1: both, 2: Gon/Goff only, 3: nonlinearity only
 parser.add_argument("--input_bit", type=int, default=8)
 parser.add_argument("--ADC_precision", type=int, default=16)
 parser.add_argument("--ADC_setting", type=int, default=4)  # 2:two memristor crossbars use one ADC; 4:one memristor crossbar use one ADC
 parser.add_argument("--ADC_rounding_function", type=str, default='floor')  # floor or round
 parser.add_argument("--wire_width", type=int, default=10000) # In practice, wire_width shall be set around 1/2 of the memristor size; Hu/MF: 10um; Ferro:200nm;
-parser.add_argument("--CMOS_technode", type=int, default=14)
+parser.add_argument("--CMOS_technode", type=int, default=45)
 parser.add_argument("--device_roadmap", type=str, default='HP') # HP: High Performance or LP: Low Power
 parser.add_argument("--temperature", type=int, default=300)
 parser.add_argument("--hardware_estimation", type=int, default=True)
