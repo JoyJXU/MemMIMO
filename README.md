@@ -2,6 +2,12 @@
 
 The proposed Memristor_MIMO simulation framework integrates a behavioral model (MemMIMO) of the mixed-signal architecture with a digital front-end. MemMIMO is the behavioral model of the mixed-signal architecture based on memristors runninig in a Python environment.
 
+# Requirements
+* python
+* cuda
+* pytorch
+* matplotlib
+
 # How to Run
 We provide a simple demo of simulate the complex MVM in the MIMO precoding algorithms to the crossbar-based architecture in examples/MIMO/main_test.py
 
