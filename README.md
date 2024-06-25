@@ -90,8 +90,15 @@ Using MF memristor in use case 1, without c2c, with d2d variation in both Gon/Go
 python main_test.py --d2d_variation 1
 ```					
 			       
-		
-				
+# Citation
+If you find MemMIMO useful or relevant to your research, please kindly cite our paper:
+```
+@inproceedings{memmimo,
+    title={MemMIMO: A Simulation Framework for Memristor-Based Massive MIMO Acceleration},
+    author={Jiawei Xu, Yi Zheng, Dimitrios Stathis, Ruijia Wang, Ruisi Shen, Li-Rong Zheng, Zhuo Zou, Ahmed Hemani},
+    year={2024}
+}
+```				
 			
 			
 			
