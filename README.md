@@ -2,6 +2,8 @@
 
 The proposed Memristor_MIMO simulation framework integrates a behavioral model (MemMIMO) of the mixed-signal architecture with a digital front-end. MemMIMO is the behavioral model of the mixed-signal architecture based on memristors runninig in a Python environment.
 
+The hardware performance estimation is based on the open-source RRAM add-on process library [NeuroSim](https://github.com/neurosim/MLP_NeuroSim_V3.0.git), with relevant functions re-implemented in Python.
+
 # Requirements
 * python
 * cuda
