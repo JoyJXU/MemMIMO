@@ -112,7 +112,7 @@ results/
 Accuracy_Results.txt
 Test_accuracy_Results.txt
 Test_Accuracy_Results.txt
-**/test_data/
+**/test_data/*
 **.png
 **.txt
 
