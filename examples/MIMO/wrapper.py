@@ -104,11 +104,24 @@ def mem_compute(value):
 
 
 def main():
+    print("\nThe source path to simbrain is: ")
     print(SIMBRAIN_PATH)
-    x = mem_program([[-0.0574626, 0.000931323], [0.00516884, 0.00190921], [0.018673, 0.145473]])
-    print(x)
-    x = mem_compute([0.999961, 0.999961, 0.999961])
-    print(x)
+    print("\n===== Programming the crossbar =====")
+    print("\tStarting the simulation test with values:")
+    vector = [[-0.0574626, 0.000931323], [0.00516884, 0.00190921], [0.018673, 0.145473]]
+    print("\t"+str(vector))
+    x = mem_program(vector)
+    if x:
+        print("\tProgrammed successfully with the given values")
+    else:
+        print("\tFailed to program the given values")
+    test_vector = [0.999961, 0.999961, 0.999961]
+    print("\n===== Computing using the crossbar =====")
+    print("\tComputing with the values:")
+    print("\t"+str(test_vector))
+    x = mem_compute(test_vector)
+    print("\n\tResults from the crossbar:")
+    print("\t"+str(x)+"\n")
 
 
 if __name__ == "__main__":
