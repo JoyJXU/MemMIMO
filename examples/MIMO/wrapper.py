@@ -28,7 +28,7 @@ class Interface:
         # parameter setting for memristor crossbar simulation - constants
         # Memristor Array
         memristor_structure = "mimo"
-        memristor_device = "MF"  # ideal, ferro, hu(FS), or MF
+        memristor_device = "ferro"  # ideal, ferro, hu(FS), or MF
         c2c_variation = False
         d2d_variation = 0  # 0: No d2d variation, 1: both, 2: Gon/Goff only, 3: nonlinearity only
         stuck_at_fault = False
@@ -105,7 +105,9 @@ def mem_compute(value):
 
 def main():
     print(SIMBRAIN_PATH)
-    x = mem_program([[0, 0.1], [0.1, 0.2], [0.2, 0.3]])
+    x = mem_program([[-0.0574626, 0.000931323], [0.00516884, 0.00190921], [0.018673, 0.145473]])
+    print(x)
+    x = mem_compute([0.999961, 0.999961, 0.999961])
     print(x)
 
 
