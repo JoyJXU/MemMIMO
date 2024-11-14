@@ -35,15 +35,15 @@ class Interface:
         retention_loss = 0  # retention loss, 0: without it, 1: during pulse, 2: no pluse for a long time
         aging_effect = 0  # 0: No aging effect, 1: equation 1, 2: equation 2
         # Peripheral Circuit
-        wire_width = 10000  # In practice, wire_width shall be set around 1/2 of the memristor size; Hu: 10um; Ferro:200nm;
-        input_bit = 8
+        wire_width = 200  # In practice, wire_width shall be set around 1/2 of the memristor size; Hu: 10um; Ferro:200nm;
+        input_bit = 16
         CMOS_technode = 14
         ADC_precision = 16
         ADC_setting = 4  # 2:two memristor crossbars use one ADC; 4:one memristor crossbar use one ADC
-        ADC_rounding_function = "floor"  # floor or round
+        ADC_rounding_function = "round"  # floor or round
         device_roadmap = "HP"  # HP: High Performance or LP: Low Power
         temperature = 300
-        hardware_estimation = True  # area and power estimation
+        hardware_estimation = False  # area and power estimation
 
         self.sim_params = {
             "device_structure": memristor_structure,
